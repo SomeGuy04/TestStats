@@ -2,8 +2,8 @@ class test:
     start=1
     end=2
     step=1
-    rlist # list of right answers
-    ulist # list of user answers
+    rlist=[0] # list of right answers
+    ulist=[0] # list of user answers
     navigator=0 #int used for navigating in jumps(in-list number of the question)
     qpos=0 #actual number of the question
     testlen=1
@@ -42,7 +42,7 @@ class test:
         rlist[navigator]=val
     def setUAns(self,val):  #set users answer for question 
         ulist[navigator]=val
-    def getQstat(self,position=self.navigator):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
+    def getQstat(self,position=navigator):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
         if(ulist[position]!='' and rlist[position]!=''):
             if (ulist[position]=='0'):
                 return 'u'
@@ -56,25 +56,25 @@ class test:
             return 'e'
     def getCorrectNumber(self): #returns number of test with correct answers
         rval=0
-        for i in range(testlen)):
+        for i in range(testlen):
             if(getQstat(self,i)=='c'):
                 rval+=1
         return rval
     def getWrongNumber(self):   #return total number of wrongly answered questions
         rval=0
-        for i in range(testlen)):
+        for i in range(testlen):
             if(getQstat(self,i)=='w'):
                 rval+=1
         return rval
     def getUnansweredNumber(self):  #return total number of unaswered questions
         rval=0
-        for i in range(testlen)):
+        for i in range(testlen):
             if(getQstat(self,i)=='u'):
                 rval+=1
         return rval
     def getSkippedNumber(self):     #return total number of skipped questions
         rval=0
-        for i in range(testlen)):
+        for i in range(testlen):
             if(getQstat(self,i)=='s'):
                 rval+=1
         return rval
