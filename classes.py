@@ -13,11 +13,15 @@ class test:
         self.end=end+1  #for making the last question availale in test
         self.step=step
         self.qpos=start
-        self.testlen=len(range(start,end,step))
+        self.testlen=len(range(start,end+1,step))
+        self.qmap=range(start,end+1,step)
         self.rlist=self.testlen*[0]
         self.ulist=self.testlen*[0]
     def getNavPos(self):
         return(self.navigator)
+    def resetNav(self): #reset navigator
+        self.qpos=self.start
+        self.navigator=0
     def islast(self):   #check if navigator is in last possible position
         if(self.navigator==self.testlen-1):
             return True
@@ -27,13 +31,13 @@ class test:
             return True
         return False
     def nextPos(self):  #goto next pos . return value true means changed position and return value false means unable to change position
-        if not islast(self):
+        if not self.islast():
             self.navigator+=1
             self.qpos+=self.step
             return True
         return False
     def prevPos(self):  #goto previous pos . return value true means changed position and return value false means unable to change position
-        if not isFirst(self):
+        if not self.isFirst():
             self.navigator-=1
             self.qpos-=self.step
             return True
@@ -45,14 +49,14 @@ class test:
     def getQPos(self):      #return accual number of the current question
         return self.qpos
     def getTestLen(self):   #return length of test
-        return testlen
-    def getQstat(self,position=navigator):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
-        if(ulist[position]!='' and rlist[position]!=''):
-            if (ulist[position]=='0'):
+        return self.testlen
+    def getQstat(self,position):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
+        if(self.ulist[position]!='' and self.rlist[position]!=''):
+            if (self.ulist[position]=='0'):
                 return 'u'
-            elif ulist[position]=='s':
+            elif self.ulist[position]=='s':
                 return 's'
-            elif ulist[position]==rlist[position]:
+            elif self.ulist[position]==self.rlist[position]:
                 return 'c'
             else:
                 return 'w'
@@ -60,57 +64,57 @@ class test:
             return 'e'
     def getCorrectNumber(self): #returns number of test with correct answers
         rval=0
-        for i in range(testlen):
-            if(getQstat(self,i)=='c'):
+        for i in range(self.testlen):
+            if(self.getQstat(i)=='c'):
                 rval+=1
         return rval
     def getWrongNumber(self):   #return total number of wrongly answered questions
         rval=0
-        for i in range(testlen):
-            if(getQstat(self,i)=='w'):
+        for i in range(self.testlen):
+            if(self.getQstat(i)=='w'):
                 rval+=1
         return rval
     def getUnansweredNumber(self):  #return total number of unaswered questions
         rval=0
-        for i in range(testlen):
-            if(getQstat(self,i)=='u'):
+        for i in range(self.testlen):
+            if(self.getQstat(i)=='u'):
                 rval+=1
         return rval
     def getSkippedNumber(self):     #return total number of skipped questions
         rval=0
-        for i in range(testlen):
-            if(getQstat(self,i)=='s'):
+        for i in range(self.testlen):
+            if(self.getQstat(i)=='s'):
                 rval+=1
         return rval
     def showCorrectQNumbers(self):  #print correctly answered question numbers
         rval=0
         pos=0
-        for i in range(start,end,step):
-            if(getQstat(self,pos)=='c'):
+        for i in self.qmap:
+            if(self.getQstat(pos)=='c'):
                 print(i)
             pos+=1
         return rval
     def showWrongQNumbers(self):    #print wrongly answered question numbers
         rval=0
         pos=0
-        for i in range(start,end,step):
-            if(getQstat(self,pos)=='w'):
+        for i in self.qmap:
+            if(self.getQstat(pos)=='w'):
                 print(i)
             pos+=1
         return rval
     def showUnansweredQNumbers(self):   #print unanswered question numbers
         rval=0
         pos=0
-        for i in range(start,end,step):
-            if(getQstat(self,pos)=='u'):
+        for i in self.qmap:
+            if(self.getQstat(pos)=='u'):
                 print(i)
             pos+=1
         return rval
     def showSkippedQNumbers(self):  #print skipped question numbers
         rval=0
         pos=0
-        for i in range(start,end,step):
-            if(getQstat(self,pos)=='s'):
+        for i in self.qmap:
+            if(self.getQstat(pos)=='s'):
                 print(i)
             pos+=1
         return rval
