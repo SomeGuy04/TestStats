@@ -23,14 +23,12 @@ while conditionsMet:
 done=False
 while not done:
     CurrentTest.resetNav()
-    print(CurrentTest.rlist)
     conditionsMet=True
     while conditionsMet:
         print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ")
         CurrentTest.setUAns(input())
 
         CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
-        print(CurrentQuestionResult)
         if CurrentQuestionResult=='c':
             print("correct")
         elif CurrentQuestionResult=='w':
