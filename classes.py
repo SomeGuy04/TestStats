@@ -8,40 +8,44 @@ class test:
     qpos=0 #actual number of the question
     testlen=1
     def __init__(self,start=1,end=2,step=1):
-        navigator=0
+        self.navigator=0
         self.start=start
-        self.end=end
+        self.end=end+1  #for making the last question availale in test
         self.step=step
-        qpos=start
-        testlen=len(range(start,end,step))
-        rlist=testlen*[0]
-        ulist=testlen*[0]
+        self.qpos=start
+        self.testlen=len(range(start,end,step))
+        self.rlist=self.testlen*[0]
+        self.ulist=self.testlen*[0]
     def getNavPos(self):
-        return(navigator)
+        return(self.navigator)
     def islast(self):   #check if navigator is in last possible position
-        if(navigator==testlen-1):
+        if(self.navigator==self.testlen-1):
             return True
         return False
     def isFirst(Self):  #check if navigato is in first possible position
-        if(navigator==0):
+        if(self.navigator==0):
             return True
         return False
     def nextPos(self):  #goto next pos . return value true means changed position and return value false means unable to change position
         if not islast(self):
-            navigator+=1
-            qpos+=step
+            self.navigator+=1
+            self.qpos+=self.step
             return True
         return False
     def prevPos(self):  #goto previous pos . return value true means changed position and return value false means unable to change position
         if not isFirst(self):
-            navigator-=1
-            qpos-=step
+            self.navigator-=1
+            self.qpos-=self.step
             return True
         return False
     def setRAns(self,val):  #set the right answer for question 
-        rlist[navigator]=val
+        self.rlist[self.navigator]=val
     def setUAns(self,val):  #set users answer for question 
-        ulist[navigator]=val
+        self.ulist[self.navigator]=val
+    def getQPos(self):      #return accual number of the current question
+        return self.qpos
+    def getTestLen(self):   #return length of test
+        return testlen
     def getQstat(self,position=navigator):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
         if(ulist[position]!='' and rlist[position]!=''):
             if (ulist[position]=='0'):
