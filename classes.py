@@ -62,59 +62,31 @@ class test:
                 return 'w'
         else:
             return 'e'
+    def getSpecificNumber(self,x):  #function will be used in next functions
+        rval=0
+        for i in range(self.testlen):
+            if(self.getQstat(i)==x):
+                rval+=1
+        return rval
     def getCorrectNumber(self): #returns number of test with correct answers
-        rval=0
-        for i in range(self.testlen):
-            if(self.getQstat(i)=='c'):
-                rval+=1
-        return rval
+        return self.getSpecificNumber('c')
     def getWrongNumber(self):   #return total number of wrongly answered questions
-        rval=0
-        for i in range(self.testlen):
-            if(self.getQstat(i)=='w'):
-                rval+=1
-        return rval
+        return self.getSpecificNumber('w')
     def getUnansweredNumber(self):  #return total number of unaswered questions
-        rval=0
-        for i in range(self.testlen):
-            if(self.getQstat(i)=='u'):
-                rval+=1
-        return rval
+        return self.getSpecificNumber('u')
     def getSkippedNumber(self):     #return total number of skipped questions
-        rval=0
-        for i in range(self.testlen):
-            if(self.getQstat(i)=='s'):
-                rval+=1
-        return rval
+        return self.getSpecificNumber('s')
+    def showSpecificQNumbers(self,x): #function will be used in next functions
+        pos=0
+        for i in self.qmap:
+            if(self.getQstat(pos)==x):
+                print(i)
+            pos+=1
     def showCorrectQNumbers(self):  #print correctly answered question numbers
-        rval=0
-        pos=0
-        for i in self.qmap:
-            if(self.getQstat(pos)=='c'):
-                print(i)
-            pos+=1
-        return rval
+        self.showSpecificQNumbers('c')
     def showWrongQNumbers(self):    #print wrongly answered question numbers
-        rval=0
-        pos=0
-        for i in self.qmap:
-            if(self.getQstat(pos)=='w'):
-                print(i)
-            pos+=1
-        return rval
+        self.showSpecificQNumbers('w')
     def showUnansweredQNumbers(self):   #print unanswered question numbers
-        rval=0
-        pos=0
-        for i in self.qmap:
-            if(self.getQstat(pos)=='u'):
-                print(i)
-            pos+=1
-        return rval
+        self.showSpecificQNumbers('u')
     def showSkippedQNumbers(self):  #print skipped question numbers
-        rval=0
-        pos=0
-        for i in self.qmap:
-            if(self.getQstat(pos)=='s'):
-                print(i)
-            pos+=1
-        return rval
+        self.showSpecificQNumbers('s')
