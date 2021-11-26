@@ -3,6 +3,12 @@ from classes import test
 def enterToContinue():
     x=input("enter anything to continue")
 
+def retakeIfNull(msg=""):
+    x=""
+    while (x==""):
+        x=input(msg)
+    return x
+
 conditionsMet=False
 while not conditionsMet:
     start=int(input("enter the starting question number : "))
@@ -17,7 +23,7 @@ CurrentTest=test(start,end,step)
 conditionsMet=True
 while conditionsMet:
     print("enter THE CORRECT answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
-    CurrentTest.setRAns(input())
+    CurrentTest.setRAns(retakeIfNull())
     conditionsMet=CurrentTest.nextPos()
 #making sure user is not zoned out while entering answers
 conditionsMet=False
@@ -33,7 +39,7 @@ while not done:
     conditionsMet=True
     while conditionsMet:
         print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
-        CurrentTest.setUAns(input())
+        CurrentTest.setUAns(retakeIfNull())
 
         CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
         if CurrentQuestionResult=='c':
