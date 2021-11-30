@@ -10,4 +10,4 @@ classes.py : using something more ram-friendly than qmap in functions
 
 main.py : tagging questions (example: "misclick" tag on question 4)
 
-main.py : non linear question navigation(only while setting right answers)
+main.py : non linear question navigation(only while setting right answers)(added AFTER GUI)
