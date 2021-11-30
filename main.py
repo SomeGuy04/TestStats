@@ -39,21 +39,29 @@ while not done:
     conditionsMet=True
     while conditionsMet:
         print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
-        CurrentTest.setUAns(retakeIfNull())
-
-        CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
-        if CurrentQuestionResult=='c':
-            print("correct")
-        elif CurrentQuestionResult=='w':
-            print("wrong,check correct answer and/or continue")
-        elif CurrentQuestionResult=='u':
-            print("unanswered,check correct answer and/or continue")
-        elif CurrentQuestionResult=='s':
-            print("skipped")
+        x=retakeIfNull()
+        if(x=='fs'):
+            conditionsMet2=True
+            while conditionsMet2:
+                CurrentTest.setUAns('s')
+                conditionsMet2=CurrentTest.nextPos()
         else:
-            print("error occured while checking answer")
-        enterToContinue()
-        conditionsMet=CurrentTest.nextPos()
+            CurrentTest.setUAns(x)
+
+            CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
+            if CurrentQuestionResult=='c':
+                print("correct")
+            elif CurrentQuestionResult=='w':
+                print("wrong,check correct answer and/or continue")
+            elif CurrentQuestionResult=='u':
+                print("unanswered,check correct answer and/or continue")
+            elif CurrentQuestionResult=='s':
+                print("skipped")
+            else:
+                print("error occured while checking answer")
+            enterToContinue()
+
+        conditionsMet=CurrentTest.nextPos() 
     # results screen
     endCmdDone=False
     while not endCmdDone:
