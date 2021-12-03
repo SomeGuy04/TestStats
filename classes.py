@@ -46,6 +46,10 @@ class test:
         self.rlist[self.navigator]=val
     def setUAns(self,val):  #set users answer for question 
         self.ulist[self.navigator]=val
+    def getRAns(self,pos=navigator):  #set the right answer for question 
+        return self.rlist[pos]
+    def getUAns(self,pos=navigator):  #set users answer for question 
+        return self.ulist[pos]
     def getQPos(self):      #return accual number of the current question
         return self.qpos
     def getTestLen(self):   #return length of test
