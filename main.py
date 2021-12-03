@@ -66,7 +66,7 @@ while not done:
     endCmdDone=False
     while not endCmdDone:
         print("results\ncorrect : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
-        "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped")
+        "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns")
         endCmd=input()
         endCmdDone=True
         if endCmd=="exit":
@@ -83,3 +83,15 @@ while not done:
                 CurrentTest.showUnansweredQNumbers()
             elif endCmd=="showSkipped":
                 CurrentTest.showSkippedQNumbers()
+            elif endCmd=="showUsrAns":
+                j=0
+                for i in range(start,end+1,step):
+                    print(i,':',end='')
+                    x=CurrentTest.getUAns(j)
+                    if(x=='s'):
+                        print("skipped")
+                    elif(x=='0'):
+                        print("unanswered")
+                    else:
+                        print(x)
+                    j+=1
