@@ -1,4 +1,11 @@
 from classes import test
+import sys
+
+showRightAns=False
+#processing command line args
+for i in range(1,len(sys.argv)):
+    if sys.argv[i]=="--showRightAns":
+        showRightAns=True
 
 def enterToContinue():
     x=input("enter anything to continue")
@@ -51,10 +58,13 @@ while not done:
             CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
             if CurrentQuestionResult=='c':
                 print("correct")
-            elif CurrentQuestionResult=='w':
-                print("wrong,check correct answer and/or continue")
-            elif CurrentQuestionResult=='u':
-                print("unanswered,check correct answer and/or continue")
+            elif (CurrentQuestionResult=='w' or CurrentQuestionResult=='u'):
+                if CurrentQuestionResult=='w':
+                    print("wrong,check correct answer and/or continue")
+                elif CurrentQuestionResult=='u':
+                    print("unanswered,check correct answer and/or continue")
+                if (showRightAns):
+                    print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
             elif CurrentQuestionResult=='s':
                 print("skipped")
             else:
