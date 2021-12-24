@@ -2,11 +2,13 @@ from classes import test
 import sys
 
 showRightAns=False
+totalQNumbers=0
 #processing command line args
 for i in range(1,len(sys.argv)):
     if sys.argv[i]=="--showRightAns":
         showRightAns=True
-
+    if sys.argv[i]=="--numberOfQuestions":
+        totalQNumbers=int(sys.argv[i+1])
 def enterToContinue():
     x=input("enter anything to continue")
 
@@ -20,11 +22,15 @@ conditionsMet=False
 while not conditionsMet:
     start=int(input("enter the starting question number : "))
     end=int(input("enter the last question number : "))
-    step=int(input("enter step number : "))
+    if totalQNumbers==0:
+        step=int(input("enter step number : "))
     if end<=start:
         print("error : incorrect numbers")
     else:
         conditionsMet=True
+if(totalQNumbers!=0):
+    step=(end-start)//(totalQNumbers-1)
+
 CurrentTest=test(start,end,step)
 #setting correct answers
 conditionsMet=True
