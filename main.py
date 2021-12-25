@@ -30,6 +30,7 @@ while not conditionsMet:
         conditionsMet=True
 if(totalQNumbers!=0):
     step=(end-start)//(totalQNumbers-1)
+    print("step is ",step)
 
 CurrentTest=test(start,end,step)
 #setting correct answers
