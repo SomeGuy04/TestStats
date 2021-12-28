@@ -31,6 +31,7 @@ while not conditionsMet:
 if(totalQNumbers!=0):
     step=(end-start)//(totalQNumbers-1)
     print("step is ",step)
+    end=start+(totalQNumbers-1)*step
 
 CurrentTest=test(start,end,step)
 #setting correct answers
