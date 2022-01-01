@@ -126,6 +126,6 @@ if mainPhase:
                     #saving crrent test general information
                     logfile=open('logfile','a')
                     testname=input("name of this test : ") 
-                    logfile.write("test name : "+ testname + "\n" + "start : "+str(start)+"\n"+"end : " + str(end) + '\n' + "step : " + str(step) + '\n')
+                    logfile.write("test name : "+ testname + "\n" + "start : "+str(start)+"\n"+"end : " + str(end) + '\n' + "step : " + str(step) + '\n\n')
                     logfile.close()
                     print("logged")
