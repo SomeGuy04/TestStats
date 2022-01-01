@@ -17,7 +17,6 @@ for i in range(1,len(sys.argv)):
         while line!='':
             print(line,end='')
             line=logfile.readline()
-        print(line,end='')  
 if mainPhase:  
     def enterToContinue():
         x=input("enter anything to continue")
@@ -126,6 +125,7 @@ if mainPhase:
                 elif endCmd=="log":
                     #saving crrent test general information
                     logfile=open('logfile','a')
-                    logfile.write("test name : "+ input("name of this test : ") + "\n" + "start : "+str(start)+"\n"+"end : " + str(end))
+                    testname=input("name of this test : ") 
+                    logfile.write("test name : "+ testname + "\n" + "start : "+str(start)+"\n"+"end : " + str(end) + '\n')
                     logfile.close()
                     print("logged")
