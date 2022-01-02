@@ -17,9 +17,12 @@ for i in range(1,len(sys.argv)):
         while line!='':
             print(line,end='')
             line=logfile.readline()
-if mainPhase:  
+    elif sys.argv[i]=="--help":
+        mainPhase=False
+        print("--help : show this\n--showlog : display logged tests\n--showRightAns : display correct answer after incorrect or unaswered question\n--numberOfQuestions : limit the number of questions")
+if mainPhase:
     def enterToContinue():
-        x=input("enter anything to continue")
+        x=input("press enter to continue")
 
     def retakeIfNull(msg=""):
         x=""
