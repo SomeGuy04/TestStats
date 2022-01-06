@@ -1,6 +1,14 @@
 from classes import test
+import os
 import sys
 
+def readlog():
+    logfile=open("logfile","r")
+    line=logfile.readline()
+    while line!='':
+        print(line,end='')
+        line=logfile.readline()
+    logfile.close()
 showRightAns=False
 totalQNumbers=0
 mainPhase=True
@@ -12,15 +20,18 @@ for i in range(1,len(sys.argv)):
         totalQNumbers=int(sys.argv[i+1])
     elif sys.argv[i]=="--showlog":
         mainPhase=False
-        logfile=open("logfile","r")
-        line=logfile.readline()
-        while line!='':
-            print(line,end='')
-            line=logfile.readline()
+        readlog()
     elif sys.argv[i]=="--help":
         mainPhase=False
         print("--help : show this\n--showlog : display logged tests\n--showRightAns : display correct answer after incorrect or unaswered question\n--numberOfQuestions : limit the number of questions")
 if mainPhase:
+    alreadyLogged=False
+    def clearConsole():
+        command = 'clear'
+        if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+            command = 'cls'
+        os.system(command)
+
     def enterToContinue():
         x=input("press enter to continue")
 
@@ -60,6 +71,7 @@ if mainPhase:
         else:
             print("i guess you're zoned out and didnt even read this")
     #entering the testing phase
+    clearConsole()
     done=False
     while not done:
         CurrentTest.resetNav()
@@ -96,7 +108,7 @@ if mainPhase:
         endCmdDone=False
         while not endCmdDone:
             print("results\ncorrect : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
-            "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log")
+            "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
             endCmd=input()
             endCmdDone=True
             if endCmd=="exit":
@@ -126,9 +138,15 @@ if mainPhase:
                             print(x)
                         j+=1
                 elif endCmd=="log":
-                    #saving crrent test general information
-                    logfile=open('logfile','a')
-                    testname=input("name of this test : ") 
-                    logfile.write("test name : "+ testname + "\n" + "start : "+str(start)+"\n"+"end : " + str(end) + '\n' + "step : " + str(step) + '\n\n')
-                    logfile.close()
-                    print("logged")
+                    if not alreadyLogged:
+                        alreadyLogged=True
+                        #saving crrent test general information
+                        logfile=open('logfile','a')
+                        testname=input("name of this test : ") 
+                        logfile.write("test name : "+ testname + "\n" + "start : "+str(start)+"\n"+"end : " + str(end) + '\n' + "step : " + str(step) + '\n\n')
+                        logfile.close()
+                        print("logged")
+                    else :
+                        print("test is already logged")
+                elif endCmd=="showLog":
+                    readlog()
