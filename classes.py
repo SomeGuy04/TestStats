@@ -17,19 +17,12 @@ class test:
         self.qmap=range(start,end+1,step)
         self.rlist=self.testlen*[0]
         self.ulist=self.testlen*[0]
-    def getNavPos(self):
-        return(self.navigator)
+    getNavPos=lambda self:self.navigator
     def resetNav(self): #reset navigator
         self.qpos=self.start
         self.navigator=0
-    def islast(self):   #check if navigator is in last possible position
-        if(self.navigator==self.testlen-1):
-            return True
-        return False
-    def isFirst(Self):  #check if navigato is in first possible position
-        if(self.navigator==0):
-            return True
-        return False
+    islast=lambda self: self.navigator==self.testlen-1  #check if navigator is in last possible position
+    isFirst=lambda self : self.navigator==0 #check if navigato is in first possible position
     def nextPos(self):  #goto next pos . return value true means changed position and return value false means unable to change position
         if not self.islast():
             self.navigator+=1
@@ -46,14 +39,10 @@ class test:
         self.rlist[self.navigator]=val
     def setUAns(self,val):  #set users answer for question 
         self.ulist[self.navigator]=val
-    def getRAns(self,pos=navigator):  #get the right answer for question 
-        return self.rlist[pos]
-    def getUAns(self,pos=navigator):  #get users answer for question 
-        return self.ulist[pos]
-    def getQPos(self):      #return accual number of the current question
-        return self.qpos
-    def getTestLen(self):   #return length of test
-        return self.testlen
+    getRAns=lambda self,pos=navigator:self.rlist[pos]  #get the right answer for question  
+    getUAns=lambda self,pos=navigator:self.ulist[pos]  #get users answer for question 
+    getQPos=lambda self:self.qpos      #return accual number of the current question
+    getTestLen=lambda self:self.testlen   #return length of test
     def getQstat(self,position):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
         if(self.ulist[position]!='' and self.rlist[position]!=''):
             if (self.ulist[position]=='0'):
@@ -72,14 +61,10 @@ class test:
             if(self.getQstat(i)==x):
                 rval+=1
         return rval
-    def getCorrectNumber(self): #returns number of test with correct answers
-        return self.getSpecificNumber('c')
-    def getWrongNumber(self):   #return total number of wrongly answered questions
-        return self.getSpecificNumber('w')
-    def getUnansweredNumber(self):  #return total number of unaswered questions
-        return self.getSpecificNumber('u')
-    def getSkippedNumber(self):     #return total number of skipped questions
-        return self.getSpecificNumber('s')
+    getCorrectNumber=lambda self:self.getSpecificNumber('c') #returns number of test with correct answers
+    getWrongNumber=lambda self:self.getSpecificNumber('w')   #return total number of wrongly answered questions
+    getUnansweredNumber=lambda self:self.getSpecificNumber('u')  #return total number of unaswered questions
+    getSkippedNumber=lambda self:self.getSpecificNumber('s')     #return total number of skipped questions
     def showSpecificQNumbers(self,x): #function will be used in next functions
         pos=0
         for i in self.qmap:
