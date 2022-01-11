@@ -11,3 +11,5 @@ main.py : non linear question navigation(only while setting right answers)(will 
 main.py : showing results on user demand ( and continuing testing )
 
 main.py : saving a test (not only answers) and continuing from where you left
+
+main.py : able to redo a saved test ( not entering everything manually again)
