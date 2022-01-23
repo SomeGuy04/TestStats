@@ -77,6 +77,7 @@ if mainPhase:
         CurrentTest.resetNav()
         conditionsMet=True
         while conditionsMet:
+            gotoNextQ=True
             print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
             x=retakeIfNull()
             if(x=='fs'):
@@ -84,6 +85,11 @@ if mainPhase:
                 while conditionsMet2:
                     CurrentTest.setUAns('s')
                     conditionsMet2=CurrentTest.nextPos()
+            elif x=="status":
+                gotoNextQ=False
+                print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
+                "\nskipped",CurrentTest.getSkippedNumber(),
+                "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
             else:
                 CurrentTest.setUAns(x)
 
@@ -100,10 +106,13 @@ if mainPhase:
                 elif CurrentQuestionResult=='s':
                     print("skipped")
                 else:
+                    gotoNextQ=False
                     print("error occured while checking answer")
-                enterToContinue()
+                if gotoNextQ:
+                    enterToContinue()
 
-            conditionsMet=CurrentTest.nextPos() 
+            if gotoNextQ:
+                conditionsMet=CurrentTest.nextPos() 
         # results screen
         endCmdDone=False
         while not endCmdDone:

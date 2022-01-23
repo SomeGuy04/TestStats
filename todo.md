@@ -13,3 +13,5 @@ main.py : showing results on user demand ( and continuing testing )
 main.py : saving a test (not only answers) and continuing from where you left
 
 main.py : able to redo a saved test ( not entering everything manually again)
+
+main.py : saving answeres of a source (similar to upper idea)
