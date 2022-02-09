@@ -78,7 +78,7 @@ if mainPhase:
         conditionsMet=True
         while conditionsMet:
             gotoNextQ=True
-            print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
+            print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left )",end='')
             x=retakeIfNull()
             if(x=='fs'):
                 conditionsMet2=True
