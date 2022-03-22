@@ -18,8 +18,12 @@ main.py : saving answeres of a source (similar to upper idea)
 
 main.py : learing mode : reind the user to check answer anyway
 
-testing : fix main.py double log
+classes.py : each question having its own comment (use can add no comment)
 
-testing : fix main.py not showloging 
+classes.py : saving answers to a file
 
-exam mode : show results only at end
+main.py : skipping questions that their answer is either 0 or s
+
+main.py : navigating questions
+
+main.py : show not correct (skipped not included)
