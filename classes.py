@@ -35,6 +35,7 @@ class test:
             self.qpos-=self.step
             return True
         return False
+    getNavQPos=lambda self,ANavPos: (ANavPos-self.start)//self.step    #return QPos of a question with a specified navigator value(may have buggy behavior)
     def setRAns(self,val):  #set the right answer for question 
         self.rlist[self.navigator]=val
     def setUAns(self,val):  #set users answer for question 
@@ -65,6 +66,14 @@ class test:
     getWrongNumber=lambda self:self.getSpecificNumber('w')   #return total number of wrongly answered questions
     getUnansweredNumber=lambda self:self.getSpecificNumber('u')  #return total number of unaswered questions
     getSkippedNumber=lambda self:self.getSpecificNumber('s')     #return total number of skipped questions
+    def getSpecificNumbers(self,x):                             #will return the number of wanted questions as a list
+        rval=0*[0]
+        pos=0
+        for i in self.qmap:
+            if(self.getQstat(pos)==x):
+                rval+=[i]
+            pos+=1
+        return rval
     def showSpecificQNumbers(self,x): #function will be used in next functions
         pos=0
         for i in self.qmap:

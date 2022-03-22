@@ -9,18 +9,23 @@ def readlog():
         print(line,end='')
         line=logfile.readline()
     logfile.close()
-showRightAns=False
 totalQNumbers=0
 mainPhase=True
+showRightAns=False
+examMode=False
 #processing command line args
 for i in range(1,len(sys.argv)):
     if sys.argv[i]=="--showRightAns":
+        examMode=False
         showRightAns=True
     elif sys.argv[i]=="--numberOfQuestions":
         totalQNumbers=int(sys.argv[i+1])
     elif sys.argv[i]=="--showlog":
         mainPhase=False
         readlog()
+    elif sys.argv[i]=="--exam-mode":
+        examMode=True
+        showRightAns=False
     elif sys.argv[i]=="--help":
         mainPhase=False
         print("--help : show this\n--showlog : display logged tests\n--showRightAns : display correct answer after incorrect or unaswered question\n--numberOfQuestions : limit the number of questions")
@@ -40,6 +45,20 @@ if mainPhase:
         while (x==""):
             x=input(msg)
         return x
+
+    def printQuestionStatusMessage(CurrentQuestionResult):      #this function returns True if the input was acceptable and False if otherwise
+        if CurrentQuestionResult=='c':
+            print("correct")
+        elif (CurrentQuestionResult=='w' or CurrentQuestionResult=='u'):
+            if CurrentQuestionResult=='w':
+                print("wrong,check correct answer and/or continue")
+            elif CurrentQuestionResult=='u':
+                print("unanswered,check correct answer and/or continue")
+        elif CurrentQuestionResult=='s':
+            print("skipped")
+        else:
+            return False
+        return True
 
     conditionsMet=False
     while not conditionsMet:
@@ -78,7 +97,7 @@ if mainPhase:
         conditionsMet=True
         while conditionsMet:
             gotoNextQ=True
-            print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left )",end='')
+            print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
             x=retakeIfNull()
             if(x=='fs'):
                 conditionsMet2=True
@@ -87,28 +106,24 @@ if mainPhase:
                     conditionsMet2=CurrentTest.nextPos()
             elif x=="status":
                 gotoNextQ=False
-                print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
-                "\nskipped",CurrentTest.getSkippedNumber(),
-                "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
+                if not examMode:
+                    print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
+                    "\nskipped",CurrentTest.getSkippedNumber(),
+                    "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
+                else :
+                    print("not available during exam mode")
             else:
                 CurrentTest.setUAns(x)
 
                 CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
-                if CurrentQuestionResult=='c':
-                    print("correct")
-                elif (CurrentQuestionResult=='w' or CurrentQuestionResult=='u'):
-                    if CurrentQuestionResult=='w':
-                        print("wrong,check correct answer and/or continue")
-                    elif CurrentQuestionResult=='u':
-                        print("unanswered,check correct answer and/or continue")
-                    if (showRightAns):
-                        print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
-                elif CurrentQuestionResult=='s':
-                    print("skipped")
-                else:
+                if(not examMode):
+                    printQuestionStatusMessage(CurrentQuestionResult)
+                if(not CurrentQuestionResult in ['c','w','u','s']):
                     gotoNextQ=False
                     print("error occured while checking answer")
-                if gotoNextQ:
+                if (showRightAns and CurrentQuestionResult!='c'):
+                        print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
+                if gotoNextQ and not examMode:
                     enterToContinue()
 
             if gotoNextQ:
@@ -129,7 +144,9 @@ if mainPhase:
                 if endCmd=="showCorrect":
                     CurrentTest.showCorrectQNumbers()
                 elif endCmd=="showWrong":
-                    CurrentTest.showWrongQNumbers()
+                    #CurrentTest.showWrongQNumbers()
+                    for i in CurrentTest.getSpecificNumbers('w'):
+                        print(i,"\t\tcorrect answer :",CurrentTest.getRAns(CurrentTest.getNavQPos(i)),"\t\tyour answer :",CurrentTest.getUAns(CurrentTest.getNavQPos(i)))
                 elif endCmd=="showUnAns":
                     CurrentTest.showUnansweredQNumbers()
                 elif endCmd=="showSkipped":
@@ -159,3 +176,5 @@ if mainPhase:
                         print("test is already logged")
                 elif endCmd=="showLog":
                     readlog()
+                else :
+                    print("error : unkknown command : ",endCmd)

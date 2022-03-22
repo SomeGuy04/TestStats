@@ -15,3 +15,11 @@ main.py : saving a test (not only answers) and continuing from where you left
 main.py : able to redo a saved test ( not entering everything manually again)
 
 main.py : saving answeres of a source (similar to upper idea)
+
+main.py : learing mode : reind the user to check answer anyway
+
+testing : fix main.py double log
+
+testing : fix main.py not showloging 
+
+exam mode : show results only at end
