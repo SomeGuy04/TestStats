@@ -176,5 +176,5 @@ if mainPhase:
                         print("test is already logged")
                 elif endCmd=="showLog":
                     readlog()
-                else :
+                elif (endCmd!="") :
                     print("error : unkknown command : ",endCmd)
