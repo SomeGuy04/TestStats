@@ -28,7 +28,7 @@ for i in range(1,len(sys.argv)):
         showRightAns=False
     elif sys.argv[i]=="--help":
         mainPhase=False
-        print("--help : show this\n--showlog : display logged tests\n--showRightAns : display correct answer after incorrect or unaswered question\n--numberOfQuestions : limit the number of questions")
+        print("--help : show this\n--showlog : display logged teszts\n--showRightAns : display correct answer after incorrect or unaswered question\n--numberOfQuestions : limit the number of questions")
 if mainPhase:
     alreadyLogged=False
     def clearConsole():
@@ -59,6 +59,14 @@ if mainPhase:
         else:
             return False
         return True
+    
+    def getAnsList():
+        global CurrentTest
+        conditionsMet=True
+        while conditionsMet:
+            print("enter THE CORRECT answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
+            CurrentTest.setRAns(retakeIfNull())
+            conditionsMet=CurrentTest.nextPos()
 
     conditionsMet=False
     while not conditionsMet:
@@ -77,11 +85,7 @@ if mainPhase:
 
     CurrentTest=test(start,end,step)
     #setting correct answers
-    conditionsMet=True
-    while conditionsMet:
-        print("enter THE CORRECT answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
-        CurrentTest.setRAns(retakeIfNull())
-        conditionsMet=CurrentTest.nextPos()
+    getAnsList()
     #making sure user is not zoned out while entering answers
     conditionsMet=False
     while not conditionsMet:
