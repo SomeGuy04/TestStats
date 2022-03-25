@@ -84,8 +84,9 @@ if mainPhase:
         end=start+(totalQNumbers-1)*step
 
     CurrentTest=test(start,end,step)
-    #setting correct answers
-    getAnsList()
+    #setting correct answers if not exam mode
+    if not examMode : getAnsList()
+    else : alreadGotAnsList=False
     #making sure user is not zoned out while entering answers
     conditionsMet=False
     while not conditionsMet:
@@ -94,9 +95,9 @@ if mainPhase:
         else:
             print("i guess you're zoned out and didnt even read this")
     #entering the testing phase
-    clearConsole()
     done=False
     while not done:
+        clearConsole()
         CurrentTest.resetNav()
         conditionsMet=True
         while conditionsMet:
@@ -116,6 +117,12 @@ if mainPhase:
                     "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
                 else :
                     print("not available during exam mode")
+            elif x=="comment":
+                gotoNextQ=False
+                CurrentTest.setComment(input("the comment : "))
+            elif x=="comments":
+                gotoNextQ
+                CurrentTest.getComment()
             else:
                 CurrentTest.setUAns(x)
 
@@ -131,7 +138,11 @@ if mainPhase:
                     enterToContinue()
 
             if gotoNextQ:
-                conditionsMet=CurrentTest.nextPos() 
+                conditionsMet=CurrentTest.nextPos()
+        # exam mode : taking answers now
+        if examMode and not alreadGotAnsList : 
+            getAnsList()
+            alreadGotAnsList=True
         # results screen
         endCmdDone=False
         while not endCmdDone:

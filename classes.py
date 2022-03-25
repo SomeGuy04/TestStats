@@ -6,6 +6,7 @@ class test:
     ulist=[0] # list of user answers
     navigator=0 #int used for navigating in jumps(in-list number of the question)
     qpos=0 #actual number of the question
+    comments=[0] #using comments
     testlen=1
     def __init__(self,start=1,end=2,step=1):
         self.navigator=0
@@ -17,6 +18,7 @@ class test:
         self.qmap=range(start,end+1,step)
         self.rlist=self.testlen*[0]
         self.ulist=self.testlen*[0]
+        self.comments=self.testlen*['']
     getNavPos=lambda self:self.navigator
     def resetNav(self): #reset navigator
         self.qpos=self.start
@@ -88,3 +90,7 @@ class test:
         self.showSpecificQNumbers('u')
     def showSkippedQNumbers(self):  #print skipped question numbers
         self.showSpecificQNumbers('s')
+    def setComment(self,cmnt,n=self.qpos) :     #used for setting comments on a question(current question by default)
+        self.comments[n]=cmnt
+    def getComment(self,n=self.qpos):           #return the user's comment
+        return self.comment[n]

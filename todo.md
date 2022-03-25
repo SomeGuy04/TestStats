@@ -8,18 +8,10 @@ main.py : tagging questions (example: "misclick" tag on question 4)(will be adde
 
 main.py : non linear question navigation(only while setting right answers)(will be added AFTER GUI)
 
-main.py : showing results on user demand ( and continuing testing )
-
 main.py : saving a test (not only answers) and continuing from where you left
 
 main.py : able to redo a saved test ( not entering everything manually again)
 
 main.py : saving answeres of a source (similar to upper idea)
 
-main.py : learing mode : reind the user to check answer anyway
-
-testing : fix main.py double log
-
-testing : fix main.py not showloging 
-
-exam mode : show results only at end
+main.py : learing mode : remind the user to check answer anyway
