@@ -15,3 +15,5 @@ main.py : able to redo a saved test ( not entering everything manually again)
 main.py : saving answeres of a source (similar to upper idea)
 
 main.py : learing mode : remind the user to check answer anyway
+
+main.py : goto command
