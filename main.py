@@ -62,6 +62,7 @@ if mainPhase:
     
     def getAnsList():
         global CurrentTest
+        CurrentTest.resetNav()
         conditionsMet=True
         while conditionsMet:
             print("enter THE CORRECT answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") : ",end='')
