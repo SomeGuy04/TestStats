@@ -90,7 +90,7 @@ class test:
         self.showSpecificQNumbers('u')
     def showSkippedQNumbers(self):  #print skipped question numbers
         self.showSpecificQNumbers('s')
-    def setComment(self,cmnt,n=self.qpos) :     #used for setting comments on a question(current question by default)
+    def setComment(self,cmnt,n=qpos) :     #used for setting comments on a question(current question by default)
         self.comments[n]=cmnt
-    def getComment(self,n=self.qpos):           #return the user's comment
+    def getComment(self,n=qpos):           #return the user's comment
         return self.comment[n]
