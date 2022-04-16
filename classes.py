@@ -1,30 +1,24 @@
 class test:
-    start=1
-    end=2
-    step=1
-    rlist=[0] # list of right answers
-    ulist=[0] # list of user answers
-    navigator=0 #int used for navigating in jumps(in-list number of the question)
-    qpos=0 #actual number of the question
-    comments=[0] #using comments
-    testlen=1
     def __init__(self,start=1,end=2,step=1):
         self.navigator=0
         self.start=start
         self.end=end+1  #for making the last question availale in test
         self.step=step
         self.qpos=start
-        self.testlen=len(range(start,end+1,step))
         self.qmap=range(start,end+1,step)
+        self.testlen=len(self.qmap)
         self.rlist=self.testlen*[0]
         self.ulist=self.testlen*[0]
         self.comments=self.testlen*['']
-    getNavPos=lambda self:self.navigator
+    def getNavPos(self):
+        return self.navigator
     def resetNav(self): #reset navigator
         self.qpos=self.start
         self.navigator=0
-    islast=lambda self: self.navigator==self.testlen-1  #check if navigator is in last possible position
-    isFirst=lambda self : self.navigator==0 #check if navigato is in first possible position
+    def islast(self):                           #check if navigator is in last possible position
+        return self.navigator==self.testlen-1  
+    def isFirst(self):                          #check if navigator is in first possible position
+        return self.navigator==0 
     def nextPos(self):  #goto next pos . return value true means changed position and return value false means unable to change position
         if not self.islast():
             self.navigator+=1
@@ -37,15 +31,34 @@ class test:
             self.qpos-=self.step
             return True
         return False
-    getNavQPos=lambda self,ANavPos: (ANavPos-self.start)//self.step    #return QPos of a question with a specified navigator value(may have buggy behavior)
+    def gotoQ(self,Qnumber):                            #goto the question,navigator dependent for ease of coding
+        if Qnumber>=0 and Qnumber<self.testlen:
+            self.navigator=Qnumber
+            self.qpos=self.getNavQPos()
+            return True
+        return False
+    def getQPosNav(self,n=None):                        #return navigator value of a question with a specified Qpos value(may have buggy behavior)
+        if n==None:
+            n=self.qpos
+        return (n-self.start)//self.step    
+    def getNavQPos(self,n=None):                        #inverse function of the above.will return qpos instead
+        if n==None:
+            n=self.navigator
+        return(self.start + n*self.step)    
     def setRAns(self,val):  #set the right answer for question 
         self.rlist[self.navigator]=val
     def setUAns(self,val):  #set users answer for question 
         self.ulist[self.navigator]=val
-    getRAns=lambda self,pos=navigator:self.rlist[pos]  #get the right answer for question  
-    getUAns=lambda self,pos=navigator:self.ulist[pos]  #get users answer for question 
-    getQPos=lambda self:self.qpos      #return accual number of the current question
-    getTestLen=lambda self:self.testlen   #return length of test
+    def getRAns(self,n=None):             #get the right answer for question 
+        if n==None:
+            n=navigator
+        return self.rlist[n]   
+    def getUAns(self,n=None):          #get users answer for question 
+        if n==None:
+            n=navigator
+        return self.ulist[n]  
+    def getQPos(self):return self.qpos      #return accual number of the current question
+    def getTestLen(self):return self.testlen   #return length of test
     def getQstat(self,position):     #return current question stats. c for correct , w for wrong , u for unanswered , s for skipped  and e for error
         if(self.ulist[position]!='' and self.rlist[position]!=''):
             if (self.ulist[position]=='0'):
@@ -64,10 +77,10 @@ class test:
             if(self.getQstat(i)==x):
                 rval+=1
         return rval
-    getCorrectNumber=lambda self:self.getSpecificNumber('c') #returns number of test with correct answers
-    getWrongNumber=lambda self:self.getSpecificNumber('w')   #return total number of wrongly answered questions
-    getUnansweredNumber=lambda self:self.getSpecificNumber('u')  #return total number of unaswered questions
-    getSkippedNumber=lambda self:self.getSpecificNumber('s')     #return total number of skipped questions
+    def getCorrectNumber(self):return self.getSpecificNumber('c') #returns number of test with correct answers
+    def getWrongNumber(self):return self.getSpecificNumber('w')   #return total number of wrongly answered questions
+    def getUnansweredNumber(self):return self.getSpecificNumber('u')  #return total number of unaswered questions
+    def getSkippedNumber(self):return self.getSpecificNumber('s')     #return total number of skipped questions
     def getSpecificNumbers(self,x):                             #will return the number of wanted questions as a list
         rval=0*[0]
         pos=0
@@ -90,7 +103,17 @@ class test:
         self.showSpecificQNumbers('u')
     def showSkippedQNumbers(self):  #print skipped question numbers
         self.showSpecificQNumbers('s')
-    def setComment(self,cmnt,n=qpos) :     #used for setting comments on a question(current question by default)
+    def setComment(self,cmnt,n=None) :     #used for setting comments on a question(current question by default)
+        if n==None:
+            n=self.navigator
         self.comments[n]=cmnt
-    def getComment(self,n=qpos):           #return the user's comment
-        return self.comment[n]
+    def getComment(self,n=None):           #return the user's comment
+        if n==None:
+            n=self.navigator
+        return self.comments[n]
+    def getCommentedQuestionsMap(self):
+        rlist=0*[0]
+        for i in range(self.testlen):
+            if self.comments[i]!='':
+                rlist+=[i]
+        return rlist

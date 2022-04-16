@@ -102,44 +102,56 @@ if mainPhase:
         CurrentTest.resetNav()
         conditionsMet=True
         while conditionsMet:
-            gotoNextQ=True
-            print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
-            x=retakeIfNull()
-            if(x=='fs'):
-                conditionsMet2=True
-                while conditionsMet2:
-                    CurrentTest.setUAns('s')
-                    conditionsMet2=CurrentTest.nextPos()
-            elif x=="status":
+            gotoNextQ=False
+            while not gotoNextQ:
                 gotoNextQ=False
-                if not examMode:
-                    print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
-                    "\nskipped",CurrentTest.getSkippedNumber(),
-                    "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
-                else :
-                    print("not available during exam mode")
-            elif x=="comment":
-                gotoNextQ=False
-                CurrentTest.setComment(input("the comment : "))
-            elif x=="comments":
-                gotoNextQ
-                CurrentTest.getComment()
-            else:
-                CurrentTest.setUAns(x)
+                print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
+                x=retakeIfNull()
+                print("x=\'",x,"\'")
+                if(x=='fs'):
+                    conditionsMet2=True
+                    while conditionsMet2:
+                        CurrentTest.setUAns('s')
+                        conditionsMet2=CurrentTest.nextPos()
+                    conditionsMet=False
+                elif x=="status":
+                    if not examMode:
+                        print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
+                        "\nskipped",CurrentTest.getSkippedNumber(),
+                        "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
+                    else :
+                        print("not available during exam mode")
+                elif x=="comment":
+                    CurrentTest.setComment(input("the comment : "))
+                elif x=="comments":
+                    CurrentTest.getComment()
+                elif x=="goto":
+                    if not CurrentTest.gotoQ(CurrentTest.getQPosNav(int(input("the question number : ")))):
+                        print("that question seems to be nonexistant")
+                else:
+                    gotoNextQ=True
+                    if x=="end":
+                        conditionsMet=False
+                    else:
+                        CurrentTest.setUAns(x)
 
-                CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
-                if(not examMode):
-                    printQuestionStatusMessage(CurrentQuestionResult)
-                if(not CurrentQuestionResult in ['c','w','u','s']):
-                    gotoNextQ=False
-                    print("error occured while checking answer")
-                if (showRightAns and CurrentQuestionResult!='c'):
-                        print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
-                if gotoNextQ and not examMode:
-                    enterToContinue()
-
-            if gotoNextQ:
-                conditionsMet=CurrentTest.nextPos()
+                        CurrentQuestionResult=CurrentTest.getQstat(CurrentTest.getNavPos())
+                        if(not examMode):
+                            printQuestionStatusMessage(CurrentQuestionResult)
+                        if(not CurrentQuestionResult in ['c','w','u','s']):
+                            gotoNextQ=False
+                            print("error occured while checking answer")
+                        if (showRightAns and CurrentQuestionResult!='c'):
+                                print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
+                        if gotoNextQ and not examMode:
+                            enterToContinue()
+            if conditionsMet:
+                if (not CurrentTest.nextPos()):
+                    print("that was the last question")
+                    print("you can finish the testing phase-if you wish- by entering\"end\" command")
+                    print("or you can use the \"goto\" command in order to return to a question")
+                else:
+                    CurrentTest.nextPos()
         # exam mode : taking answers now
         if examMode and not alreadGotAnsList : 
             getAnsList()
@@ -148,7 +160,7 @@ if mainPhase:
         endCmdDone=False
         while not endCmdDone:
             print("\nresults\ncorrect : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
-            "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog")
+            "\nskipped",CurrentTest.getSkippedNumber(),"\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog,showComments")
             endCmd=input()
             endCmdDone=True
             if endCmd=="exit":
@@ -162,7 +174,7 @@ if mainPhase:
                 elif endCmd=="showWrong":
                     #CurrentTest.showWrongQNumbers()
                     for i in CurrentTest.getSpecificNumbers('w'):
-                        print(i,"\t\tcorrect answer :",CurrentTest.getRAns(CurrentTest.getNavQPos(i)),"\t\tyour answer :",CurrentTest.getUAns(CurrentTest.getNavQPos(i)))
+                        print(i,"\t\tcorrect answer :",CurrentTest.getRAns(CurrentTest.getQPosNav(i)),"\t\tyour answer :",CurrentTest.getUAns(CurrentTest.getQPosNav(i)))
                 elif endCmd=="showUnAns":
                     CurrentTest.showUnansweredQNumbers()
                 elif endCmd=="showSkipped":
@@ -179,6 +191,9 @@ if mainPhase:
                         else:
                             print(x)
                         j+=1
+                elif endCmd=="showComments":
+                    for commentsNavigator in CurrentTest.getCommentedQuestionsMap():
+                        print("Question N. : ",CurrentTest.getNavQPos(commentsNavigator),"\t\tThe comment : ",CurrentTest.getComment(commentsNavigator))
                 elif endCmd=="log":
                     if not alreadyLogged:
                         alreadyLogged=True
