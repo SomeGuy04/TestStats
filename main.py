@@ -106,7 +106,8 @@ if mainPhase:
             while not gotoNextQ:
                 gotoNextQ=False
                 print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
-                x=retakeIfNull()                if(x=='fs'):
+                x=retakeIfNull()                
+                if(x=='fs'):
                     conditionsMet2=True
                     while conditionsMet2:
                         CurrentTest.setUAns('s')
