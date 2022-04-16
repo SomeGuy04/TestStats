@@ -106,9 +106,7 @@ if mainPhase:
             while not gotoNextQ:
                 gotoNextQ=False
                 print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
-                x=retakeIfNull()
-                print("x=\'",x,"\'")
-                if(x=='fs'):
+                x=retakeIfNull()                if(x=='fs'):
                     conditionsMet2=True
                     while conditionsMet2:
                         CurrentTest.setUAns('s')
@@ -145,13 +143,10 @@ if mainPhase:
                                 print("the right answer is : ",CurrentTest.getRAns(CurrentTest.getNavPos()))
                         if gotoNextQ and not examMode:
                             enterToContinue()
-            if conditionsMet:
-                if (not CurrentTest.nextPos()):
-                    print("that was the last question")
-                    print("you can finish the testing phase-if you wish- by entering\"end\" command")
-                    print("or you can use the \"goto\" command in order to return to a question")
-                else:
-                    CurrentTest.nextPos()
+            if (conditionsMet and (not CurrentTest.nextPos())):
+                print("that was the last question")
+                print("you can finish the testing phase-if you wish- by entering\"end\" command")
+                print("or you can use the \"goto\" command in order to return to a question")
         # exam mode : taking answers now
         if examMode and not alreadGotAnsList : 
             getAnsList()
