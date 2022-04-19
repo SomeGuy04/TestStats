@@ -107,13 +107,7 @@ if mainPhase:
                 gotoNextQ=False
                 print("enter YOUR answer for test number ",CurrentTest.getQPos()," ( ",CurrentTest.getNavPos()+1,"/",CurrentTest.getTestLen(),") (", CurrentTest.getTestLen()-CurrentTest.getNavPos(),"questions left ) : ",end='')
                 x=retakeIfNull()                
-                if(x=='fs'):
-                    conditionsMet2=True
-                    while conditionsMet2:
-                        CurrentTest.setUAns('s')
-                        conditionsMet2=CurrentTest.nextPos()
-                    conditionsMet=False
-                elif x=="status":
+                if x=="status":
                     if not examMode:
                         print("correct : ",CurrentTest.getCorrectNumber(),"\nwrong : ",CurrentTest.getWrongNumber(),"\nunanswered : ",CurrentTest.getUnansweredNumber(),
                         "\nskipped",CurrentTest.getSkippedNumber(),
@@ -129,6 +123,12 @@ if mainPhase:
                         print("that question seems to be nonexistant")
                 else:
                     gotoNextQ=True
+                    if(x=='fs'):
+                        conditionsMet2=True
+                        while conditionsMet2:
+                            CurrentTest.setUAns('s')
+                            conditionsMet2=CurrentTest.nextPos()
+                        conditionsMet=False
                     if x=="end":
                         conditionsMet=False
                     else:
