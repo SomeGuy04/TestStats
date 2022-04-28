@@ -4,26 +4,8 @@ chunk based read and write(ability to save answers)
 
 classes.py : using something more ram-friendly than qmap in functions
 
-main.py : tagging questions (example: "misclick" tag on question 4)(will be added on GUI)
-
-main.py : non linear question navigation(only while setting right answers)(will be added AFTER GUI)
-
-main.py : showing results on user demand ( and continuing testing )
-
 main.py : saving a test (not only answers) and continuing from where you left
 
 main.py : able to redo a saved test ( not entering everything manually again)
 
 main.py : saving answeres of a source (similar to upper idea)
-
-main.py : learing mode : reind the user to check answer anyway
-
-classes.py : each question having its own comment (use can add no comment)
-
-classes.py : saving answers to a file
-
-main.py : skipping questions that their answer is either 0 or s
-
-main.py : navigating questions
-
-main.py : show not correct (skipped not included)
