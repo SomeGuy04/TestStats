@@ -18,6 +18,8 @@ mainPhase = True
 showRightAns = False
 examMode = False
 limitedTimeMode = False
+loadFromDisk = False
+resumeFromSuspend = False
 # processing command line args
 for i in range(1, len(sys.argv)):
     if sys.argv[i] == "--show-right-ans":
@@ -35,6 +37,10 @@ for i in range(1, len(sys.argv)):
         limitedTimeMode = True
         totalTimeElapsed = 0
         questionsAnswered = 0
+    elif sys.argv[i] == "--load-from-disk":
+        loadFromDisk = True
+    elif sys.argv[i] == "--resume":
+        resumeFromSuspend = True
     elif sys.argv[i] == "--help":
         mainPhase = False
         print(
@@ -44,6 +50,8 @@ for i in range(1, len(sys.argv)):
             "--number-of-questions : limit the number of questions\n",
             "--exam-mode : disabling after question message",
             "--limited-time-mode : will give question numbers according to user answering speed",
+            "--load-from-disk : will load answer sheet from disk instead of inputting manually",
+            "--resume : resume from a suspended session",
         )
 if mainPhase:
     alreadyLogged = False
@@ -78,23 +86,46 @@ if mainPhase:
             return False
         return True
 
+    def getAns():
+        global CurrentTest
+        print(
+            "enter THE CORRECT answer for test number ",
+            CurrentTest.getQPos(),
+            " ( ",
+            CurrentTest.getNavPos() + 1,
+            "/",
+            CurrentTest.getTestLen(),
+            ") : ",
+            end="",
+        )
+        CurrentTest.setRAns(retakeIfNull())
+
     def getAnsList():
+        global loadFromDisk
         global CurrentTest
         CurrentTest.resetNav()
-        conditionsMet = True
-        while conditionsMet:
-            print(
-                "enter THE CORRECT answer for test number ",
-                CurrentTest.getQPos(),
-                " ( ",
-                CurrentTest.getNavPos() + 1,
-                "/",
-                CurrentTest.getTestLen(),
-                ") : ",
-                end="",
-            )
-            CurrentTest.setRAns(retakeIfNull())
-            conditionsMet = CurrentTest.nextPos()
+        if loadFromDisk == False:
+            conditionsMet = True
+            while conditionsMet:
+                getAns()
+                conditionsMet = CurrentTest.nextPos()
+                x = ""
+
+            while not x in ["y", "n"]:
+                x = input("do you want to save this answer sheet?[y,n] : ")
+            if x == "y":
+                CurrentTest.saveAnsSheet(
+                    input("name of this answer sheet : ").replace("/", "")
+                )
+        else:
+            for i in CurrentTest.loadAnsSheet(input("name of answersheet : ")):
+                print(
+                    "question number ",
+                    i,
+                    "did not exist at the save and will be inputted manually",
+                )
+                CurrentTest.gotoQ(CurrentTest.getQPosNav(i))
+                getAns()
 
     def mkRangesLists(theString):
         returnList = 0 * [0]
@@ -103,7 +134,7 @@ if mainPhase:
         for i in theString.split(","):
             if "-" in i:
                 returnList += range(int(i.split("-")[0]), int(i.split("-")[-1]) + 1)
-            elif i!='':
+            elif i != "":
                 returnList += [int(i)]
         return returnList
 
@@ -143,12 +174,18 @@ if mainPhase:
             )
 
     CurrentTest = test()
-    CurrentTest.setQMap(getMap())
-    # setting correct answers if not exam mode
-    if not examMode:
-        getAnsList()
+    firstTimeResume = False
+    if not resumeFromSuspend:
+        CurrentTest.setQMap(getMap())
+        # setting correct answers if not exam mode
+        if not examMode:
+            getAnsList()
+        else:
+            alreadGotAnsList = False
     else:
-        alreadGotAnsList = False
+        # loading from suspend
+        CurrentTest.readFromDisk(input("session name : "))
+        firstTimeResume = True
     # making sure user is not zoned out while entering answers
     conditionsMet = False
     while not conditionsMet:
@@ -162,7 +199,9 @@ if mainPhase:
     done = False
     while not done:
         clearConsole()
-        CurrentTest.resetNav()
+        if not firstTimeResume:
+            CurrentTest.resetNav()
+            firstTimeResume = True
         conditionsMet = True
         while conditionsMet:
             if limitedTimeMode:
@@ -219,6 +258,11 @@ if mainPhase:
                         conditionsMet = False
                     elif x == "end":
                         conditionsMet = False
+                    elif x == "suspend":
+                        conditionsMet = False
+                        CurrentTest.saveToDisk(
+                            input("name of this saved session : ").replace("/", "")
+                        )
                     else:
                         CurrentTest.setUAns(x)
 
@@ -244,7 +288,7 @@ if mainPhase:
                 timeleft -= timeElapsed
                 totalTimeElapsed += timeElapsed
                 avgSpeed = totalTimeElapsed / questionsAnswered
-                print(timeleft,avgSpeed)
+                print(timeleft, avgSpeed)
                 numberOfQuestionsThatCanBeAnswered = max(int(timeleft / avgSpeed), 1)
                 questionsLeft = CurrentTest.getTestLen() - (CurrentTest.getNavPos() + 1)
                 jump = questionsLeft // numberOfQuestionsThatCanBeAnswered
