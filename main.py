@@ -1,6 +1,7 @@
 from classes import test
 import os
 import sys
+import time
 
 
 def readlog():
@@ -16,12 +17,13 @@ totalQNumbers = 0
 mainPhase = True
 showRightAns = False
 examMode = False
+limitedTimeMode = False
 # processing command line args
 for i in range(1, len(sys.argv)):
-    if sys.argv[i] == "--showRightAns":
+    if sys.argv[i] == "--show-right-ans":
         examMode = False
         showRightAns = True
-    elif sys.argv[i] == "--numberOfQuestions":
+    elif sys.argv[i] == "--number-of-questions":
         totalQNumbers = int(sys.argv[i + 1])
     elif sys.argv[i] == "--showlog":
         mainPhase = False
@@ -29,14 +31,19 @@ for i in range(1, len(sys.argv)):
     elif sys.argv[i] == "--exam-mode":
         examMode = True
         showRightAns = False
+    elif sys.argv[i] == "--limited-time-mode":
+        limitedTimeMode = True
+        totalTimeElapsed = 0
+        questionsAnswered = 0
     elif sys.argv[i] == "--help":
         mainPhase = False
         print(
             "--help : show this\n",
             "--showlog : display logged teszts\n",
-            "--showRightAns : display correct answer after incorrect or unaswered question\n",
-            "--numberOfQuestions : limit the number of questions\n",
+            "--show-right-ans : display correct answer after incorrect or unaswered question\n",
+            "--number-of-questions : limit the number of questions\n",
             "--exam-mode : disabling after question message",
+            "--limited-time-mode : will give question numbers according to user answering speed",
         )
 if mainPhase:
     alreadyLogged = False
@@ -96,7 +103,7 @@ if mainPhase:
         for i in theString.split(","):
             if "-" in i:
                 returnList += range(int(i.split("-")[0]), int(i.split("-")[-1]) + 1)
-            else:
+            elif i!='':
                 returnList += [int(i)]
         return returnList
 
@@ -150,12 +157,16 @@ if mainPhase:
         else:
             print("i guess you're zoned out and didnt even read this")
     # entering the testing phase
+    if limitedTimeMode:
+        timeleft = int(input("how much time is left?(in minutes) : "))
     done = False
     while not done:
         clearConsole()
         CurrentTest.resetNav()
         conditionsMet = True
         while conditionsMet:
+            if limitedTimeMode:
+                timeStart = time.time()
             gotoNextQ = False
             while not gotoNextQ:
                 gotoNextQ = False
@@ -226,6 +237,22 @@ if mainPhase:
                             )
                         if gotoNextQ and not examMode:
                             enterToContinue()
+            if limitedTimeMode:
+                questionsAnswered += 1
+                timeEnd = time.time()
+                timeElapsed = (timeEnd - timeStart) / 60  # time elapsed in minutes
+                timeleft -= timeElapsed
+                totalTimeElapsed += timeElapsed
+                avgSpeed = totalTimeElapsed / questionsAnswered
+                print(timeleft,avgSpeed)
+                numberOfQuestionsThatCanBeAnswered = max(int(timeleft / avgSpeed), 1)
+                questionsLeft = CurrentTest.getTestLen() - (CurrentTest.getNavPos() + 1)
+                jump = questionsLeft // numberOfQuestionsThatCanBeAnswered
+                if jump != 0:
+                    for i in range(
+                        jump - 1
+                    ):  # doing it one time less so the last question message can be displayed
+                        CurrentTest.nextPos()
             if conditionsMet and (not CurrentTest.nextPos()):
                 print("that was the last question")
                 print(
