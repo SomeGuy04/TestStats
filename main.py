@@ -197,7 +197,7 @@ if mainPhase:
     if limitedTimeMode:
         timeleft = int(input("how much time is left?(in minutes) : "))
     done = False
-    suspending=False
+    suspending = False
     while not done:
         clearConsole()
         if not firstTimeResume:
@@ -260,8 +260,8 @@ if mainPhase:
                     elif x == "end":
                         conditionsMet = False
                     elif x == "suspend":
-                        done=True
-                        suspending=True
+                        done = True
+                        suspending = True
                         conditionsMet = False
                         CurrentTest.saveToDisk(
                             input("name of this saved session : ").replace("/", "")
