@@ -197,6 +197,7 @@ if mainPhase:
     if limitedTimeMode:
         timeleft = int(input("how much time is left?(in minutes) : "))
     done = False
+    suspending=False
     while not done:
         clearConsole()
         if not firstTimeResume:
@@ -259,6 +260,8 @@ if mainPhase:
                     elif x == "end":
                         conditionsMet = False
                     elif x == "suspend":
+                        done=True
+                        suspending=True
                         conditionsMet = False
                         CurrentTest.saveToDisk(
                             input("name of this saved session : ").replace("/", "")
@@ -310,79 +313,80 @@ if mainPhase:
             getAnsList()
             alreadGotAnsList = True
         # results screen
-        endCmdDone = False
-        while not endCmdDone:
-            print(
-                "\nresults\ncorrect : ",
-                CurrentTest.getCorrectNumber(),
-                "\nwrong : ",
-                CurrentTest.getWrongNumber(),
-                "\nunanswered : ",
-                CurrentTest.getUnansweredNumber(),
-                "\nskipped",
-                CurrentTest.getSkippedNumber(),
-                "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog,showComments",
-            )
-            endCmd = input()
-            endCmdDone = True
-            if endCmd == "exit":
-                done = True
-            elif endCmd == "redo":
-                done = False
-            else:
-                endCmdDone = False
-                if endCmd == "showCorrect":
-                    CurrentTest.showCorrectQNumbers()
-                elif endCmd == "showWrong":
-                    # CurrentTest.showWrongQNumbers()
-                    for i in CurrentTest.getSpecificNumbers("w"):
-                        print(
-                            i,
-                            "\t\tcorrect answer :",
-                            CurrentTest.getRAns(CurrentTest.getQPosNav(i)),
-                            "\t\tyour answer :",
-                            CurrentTest.getUAns(CurrentTest.getQPosNav(i)),
-                        )
-                elif endCmd == "showUnAns":
-                    CurrentTest.showUnansweredQNumbers()
-                elif endCmd == "showSkipped":
-                    CurrentTest.showSkippedQNumbers()
-                elif endCmd == "showUsrAns":
-                    j = 0
-                    for i in range(start, end + 1, step):
-                        print(i, ":", end="")
-                        x = CurrentTest.getUAns(j)
-                        if x == "s":
-                            print("skipped")
-                        elif x == "0":
-                            print("unanswered")
+        if not suspending:
+            endCmdDone = False
+            while not endCmdDone:
+                print(
+                    "\nresults\ncorrect : ",
+                    CurrentTest.getCorrectNumber(),
+                    "\nwrong : ",
+                    CurrentTest.getWrongNumber(),
+                    "\nunanswered : ",
+                    CurrentTest.getUnansweredNumber(),
+                    "\nskipped",
+                    CurrentTest.getSkippedNumber(),
+                    "\nwrite exit to exit,redo to redo the answering,showCorrect,showWrong,showUnAns,showSkipped,showUsrAns,log,showLog,showComments",
+                )
+                endCmd = input()
+                endCmdDone = True
+                if endCmd == "exit":
+                    done = True
+                elif endCmd == "redo":
+                    done = False
+                else:
+                    endCmdDone = False
+                    if endCmd == "showCorrect":
+                        CurrentTest.showCorrectQNumbers()
+                    elif endCmd == "showWrong":
+                        # CurrentTest.showWrongQNumbers()
+                        for i in CurrentTest.getSpecificNumbers("w"):
+                            print(
+                                i,
+                                "\t\tcorrect answer :",
+                                CurrentTest.getRAns(CurrentTest.getQPosNav(i)),
+                                "\t\tyour answer :",
+                                CurrentTest.getUAns(CurrentTest.getQPosNav(i)),
+                            )
+                    elif endCmd == "showUnAns":
+                        CurrentTest.showUnansweredQNumbers()
+                    elif endCmd == "showSkipped":
+                        CurrentTest.showSkippedQNumbers()
+                    elif endCmd == "showUsrAns":
+                        j = 0
+                        for i in range(start, end + 1, step):
+                            print(i, ":", end="")
+                            x = CurrentTest.getUAns(j)
+                            if x == "s":
+                                print("skipped")
+                            elif x == "0":
+                                print("unanswered")
+                            else:
+                                print(x)
+                            j += 1
+                    elif endCmd == "showComments":
+                        showComments()
+                    elif endCmd == "log":
+                        if not alreadyLogged:
+                            alreadyLogged = True
+                            # saving crrent test general information
+                            logfile = open("logfile", "a")
+                            testname = input("name of this test : ")
+                            logfile.write(
+                                "test name : "
+                                + testname
+                                + "\n"
+                                + "start : "
+                                + str(CurrentTest.qmap[0])
+                                + "\n"
+                                + "end : "
+                                + str(CurrentTest.qmap[-1])
+                                + "\n\n"
+                            )
+                            logfile.close()
+                            print("logged")
                         else:
-                            print(x)
-                        j += 1
-                elif endCmd == "showComments":
-                    showComments()
-                elif endCmd == "log":
-                    if not alreadyLogged:
-                        alreadyLogged = True
-                        # saving crrent test general information
-                        logfile = open("logfile", "a")
-                        testname = input("name of this test : ")
-                        logfile.write(
-                            "test name : "
-                            + testname
-                            + "\n"
-                            + "start : "
-                            + str(CurrentTest.qmap[0])
-                            + "\n"
-                            + "end : "
-                            + str(CurrentTest.qmap[-1])
-                            + "\n\n"
-                        )
-                        logfile.close()
-                        print("logged")
-                    else:
-                        print("test is already logged")
-                elif endCmd == "showLog":
-                    readlog()
-                elif endCmd != "":
-                    print("error : unkknown command : ", endCmd)
+                            print("test is already logged")
+                    elif endCmd == "showLog":
+                        readlog()
+                    elif endCmd != "":
+                        print("error : unkknown command : ", endCmd)

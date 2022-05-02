@@ -244,7 +244,7 @@ class test:
             ansSheetFile.close()
             return returnList
         except FileNotFoundError:
-            return [[""]]  # like an empty file
+            return [""]  # like an empty file
 
     def saveAnsSheet(self, ansSheetName):
         test.createSaveDirs()
@@ -293,7 +293,6 @@ class test:
                     i += 1
         else:
             finalPart = livePart
-        print(finalPart)
         ## and finally save
         ansSheetFile = open("SavedAnswerSheets/" + ansSheetName, "w")
         for i in finalPart:
