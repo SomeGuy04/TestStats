@@ -48,9 +48,9 @@ for i in range(1, len(sys.argv)):
             "--showlog : display logged teszts\n",
             "--show-right-ans : display correct answer after incorrect or unaswered question\n",
             "--number-of-questions : limit the number of questions\n",
-            "--exam-mode : disabling after question message",
-            "--limited-time-mode : will give question numbers according to user answering speed",
-            "--load-from-disk : will load answer sheet from disk instead of inputting manually",
+            "--exam-mode : disabling after question message\n",
+            "--limited-time-mode : will give question numbers according to user answering speed\n",
+            "--load-from-disk : will load answer sheet from disk instead of inputting manually\n",
             "--resume : resume from a suspended session",
         )
 if mainPhase:
