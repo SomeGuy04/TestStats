@@ -133,36 +133,23 @@ if mainPhase:
         theString = theString.replace(" ", "")
         for i in theString.split(","):
             if "-" in i:
-                returnList += range(int(i.split("-")[0]), int(i.split("-")[-1]) + 1)
+                processedStr = theString.split("-")
+                if len(processedStr) == 2:
+                    returnList += range(int(processedStr[0]),int(processedStr[1])+1)
+                elif len(processedStr) == 3:
+                    returnList += range(
+                        int(processedStr[0]), int(processedStr[1])+1, int(processedStr[2])
+                    )
             elif i != "":
                 returnList += [int(i)]
         return returnList
 
     def getMap():
-        x = ""
-        while not (x in ["y", "n"]):
-            x = input("do question number follow a ax+b pattern?[y,n] :")
-        if x == "y":
-            global totalQNumbers
-            conditionsMet = False
-            while not conditionsMet:
-                start = int(input("enter the starting question number : "))
-                end = int(input("enter the last question number : "))
-                if totalQNumbers == 0:
-                    step = int(input("enter step number : "))
-                if end <= start:
-                    print("error : incorrect numbers")
-                else:
-                    conditionsMet = True
-            if totalQNumbers != 0:
-                step = (end - start) // (totalQNumbers - 1)
-                print("step is ", step)
-                end = start + (totalQNumbers - 1) * step
-            return range(start, end + 1, step)
-        if x == "n":
-            return mkRangesLists(
-                input("use commas to seperate numbers,use - for defining ranges : ")
+        return mkRangesLists(
+            input(
+                "use commas to seperate numbers,use - for defining ranges and use - for the second time to set step : "
             )
+        )
 
     def showComments():
         for commentsNavigator in CurrentTest.getCommentedQuestions():
